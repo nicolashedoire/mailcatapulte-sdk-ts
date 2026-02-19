@@ -1,18 +1,18 @@
 /**
- * Custom error class for all MailOps API errors.
+ * Custom error class for all MailCatapulte API errors.
  *
  * @example
  * ```ts
  * try {
  *   await client.emails.send({ ... });
  * } catch (err) {
- *   if (err instanceof MailOpsError) {
+ *   if (err instanceof MailCatapulteError) {
  *     console.error(err.statusCode, err.type, err.message);
  *   }
  * }
  * ```
  */
-export class MailOpsError extends Error {
+export class MailCatapulteError extends Error {
   public readonly statusCode: number;
   public readonly type: string;
   public readonly code?: string;
@@ -24,7 +24,7 @@ export class MailOpsError extends Error {
     code?: string,
   ) {
     super(message);
-    this.name = "MailOpsError";
+    this.name = "MailCatapulteError";
     this.statusCode = statusCode;
     this.type = type;
     this.code = code;

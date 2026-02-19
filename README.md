@@ -1,6 +1,6 @@
-# mailops
+# mailcatapulte
 
-Official TypeScript SDK for [MailOps](https://github.com/nicolashedoire/mailops) — the self-hosted transactional email platform.
+Official TypeScript SDK for [MailCatapulte](https://github.com/nicolashedoire/mailcatapulte) — the self-hosted transactional email platform.
 
 - Zero dependencies (uses native `fetch`)
 - Works in Node.js 18+, Bun, Deno, Cloudflare Workers
@@ -11,15 +11,15 @@ Official TypeScript SDK for [MailOps](https://github.com/nicolashedoire/mailops)
 ## Installation
 
 ```bash
-npm install mailops
+npm install mailcatapulte
 ```
 
 ## Quick Start
 
 ```typescript
-import { MailOps } from "mailops";
+import { MailCatapulte } from "mailcatapulte";
 
-const client = new MailOps({
+const client = new MailCatapulte({
   apiKey: "mo_live_...",
   baseUrl: "https://api.yourdomain.com",
 });
@@ -38,9 +38,9 @@ console.log("Email queued:", id);
 ## Configuration
 
 ```typescript
-const client = new MailOps({
+const client = new MailCatapulte({
   apiKey: "mo_live_...",          // Required — from the dashboard > API Keys
-  baseUrl: "https://api.x.com",  // Default: https://api.mailops.fr
+  baseUrl: "https://api.x.com",  // Default: https://api.mailcatapulte.fr
   timeoutMs: 10_000,             // Default: 30000
 });
 ```
@@ -237,7 +237,7 @@ await client.apiKeys.revoke("key_id");
 ```typescript
 // Create
 const { secret } = await client.webhooks.create({
-  url: "https://yourdomain.com/webhooks/mailops",
+  url: "https://yourdomain.com/webhooks/mailcatapulte",
   events: ["email.delivered", "email.bounced", "email.opened"],
 });
 
@@ -556,12 +556,12 @@ await client.dedicatedIps.delete("ip_id");
 ## Error Handling
 
 ```typescript
-import { MailOps, MailOpsError } from "mailops";
+import { MailCatapulte, MailCatapulteError } from "mailcatapulte";
 
 try {
   await client.emails.send({ ... });
 } catch (err) {
-  if (err instanceof MailOpsError) {
+  if (err instanceof MailCatapulteError) {
     console.error("Status:", err.statusCode);  // 400, 401, 404, etc.
     console.error("Type:", err.type);           // "validation_error", etc.
     console.error("Message:", err.message);

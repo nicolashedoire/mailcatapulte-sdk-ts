@@ -1,7 +1,7 @@
 {
-  "name": "mailops",
+  "name": "mailcatapulte",
   "version": "0.1.0",
-  "description": "Official TypeScript SDK for MailOps — the self-hosted transactional email platform",
+  "description": "Official TypeScript SDK for Mail Catapulte — catapult your transactional emails",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -22,24 +22,25 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "mailops",
+    "mailcatapulte",
     "email",
     "transactional",
     "sdk",
     "typescript",
     "smtp",
     "newsletter",
-    "api"
+    "api",
+    "catapulte"
   ],
   "author": "Nicolas Hedoire",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nicolashedoire/mailops-sdk-typescript"
+    "url": "https://github.com/nicolashedoire/mailcatapulte"
   },
-  "homepage": "https://github.com/nicolashedoire/mailops-sdk-typescript#readme",
+  "homepage": "https://mailcatapulte.com",
   "bugs": {
-    "url": "https://github.com/nicolashedoire/mailops-sdk-typescript/issues"
+    "url": "https://github.com/nicolashedoire/mailcatapulte/issues"
   },
   "devDependencies": {
     "tsup": "^8.0.0",

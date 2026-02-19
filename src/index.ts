@@ -1,4 +1,4 @@
-import { MailOpsError } from "./error.js";
+import { MailCatapulteError } from "./error.js";
 import { HttpClient } from "./http.js";
 import {
   AuthResource,
@@ -21,19 +21,19 @@ import {
   SettingsResource,
   DedicatedIpsResource,
 } from "./resources.js";
-import type { MailOpsConfig } from "./types.js";
+import type { MailCatapulteConfig } from "./types.js";
 
 const SDK_VERSION = "0.1.0";
 const DEFAULT_TIMEOUT_MS = 30_000;
 
 /**
- * MailOps SDK client.
+ * MailCatapulte SDK client.
  *
  * @example
  * ```ts
- * import { MailOps } from "mailops";
+ * import { MailCatapulte } from "mailcatapulte";
  *
- * const client = new MailOps({
+ * const client = new MailCatapulte({
  *   apiKey: "mo_live_...",
  *   baseUrl: "https://api.qonteo.fr",
  * });
@@ -50,7 +50,7 @@ const DEFAULT_TIMEOUT_MS = 30_000;
  * const templates = await client.templates.list();
  * ```
  */
-export class MailOps {
+export class MailCatapulte {
   public readonly auth: AuthResource;
   public readonly emails: EmailsResource;
   public readonly templates: TemplatesResource;
@@ -71,13 +71,13 @@ export class MailOps {
   public readonly settings: SettingsResource;
   public readonly dedicatedIps: DedicatedIpsResource;
 
-  constructor(config: MailOpsConfig) {
+  constructor(config: MailCatapulteConfig) {
     if (!config.apiKey) {
-      throw new MailOpsError(0, "configuration_error", "apiKey is required");
+      throw new MailCatapulteError(0, "configuration_error", "apiKey is required");
     }
 
     const http = new HttpClient(
-      config.baseUrl ?? "https://api.mailops.fr",
+      config.baseUrl ?? "https://api.mailcatapulte.com",
       config.apiKey,
       config.timeoutMs ?? DEFAULT_TIMEOUT_MS,
       SDK_VERSION,
@@ -106,6 +106,6 @@ export class MailOps {
 }
 
 // Re-export everything
-export { MailOpsError } from "./error.js";
+export { MailCatapulteError } from "./error.js";
 export * from "./types.js";
-export default MailOps;
+export default MailCatapulte;

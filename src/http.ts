@@ -1,4 +1,4 @@
-import { MailOpsError } from "./error.js";
+import { MailCatapulteError } from "./error.js";
 
 const MAX_RESPONSE_SIZE = 10 * 1024 * 1024; // 10 MB
 
@@ -43,7 +43,7 @@ export class HttpClient {
     const headers: Record<string, string> = {
       Authorization: `Bearer ${this.apiKey}`,
       Accept: "application/json",
-      "User-Agent": `mailops-sdk-typescript/${this.sdkVersion}`,
+      "User-Agent": `mailcatapulte/${this.sdkVersion}`,
     };
 
     if (options.body !== undefined && options.method !== "GET") {
@@ -65,13 +65,13 @@ export class HttpClient {
       response = await fetch(url.toString(), fetchInit);
     } catch (err) {
       if (err instanceof DOMException && err.name === "TimeoutError") {
-        throw new MailOpsError(
+        throw new MailCatapulteError(
           0,
           "timeout_error",
           `Request timed out after ${this.timeoutMs}ms`,
         );
       }
-      throw new MailOpsError(
+      throw new MailCatapulteError(
         0,
         "network_error",
         `Network request failed: ${err instanceof Error ? err.message : String(err)}`,
@@ -80,14 +80,14 @@ export class HttpClient {
 
     const contentLength = response.headers.get("content-length");
     if (contentLength && parseInt(contentLength, 10) > MAX_RESPONSE_SIZE) {
-      throw new MailOpsError(502, "client_error", "Response too large");
+      throw new MailCatapulteError(502, "client_error", "Response too large");
     }
 
     let json: unknown;
     try {
       json = await response.json();
     } catch {
-      throw new MailOpsError(
+      throw new MailCatapulteError(
         response.status,
         "parse_error",
         `Failed to parse response body (HTTP ${response.status})`,
@@ -111,7 +111,7 @@ export class HttpClient {
         statusCode: response.status,
         code: undefined as string | undefined,
       };
-      throw new MailOpsError(
+      throw new MailCatapulteError(
         apiErr.statusCode ?? response.status,
         apiErr.type,
         apiErr.message,
