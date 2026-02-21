@@ -34,13 +34,13 @@ const DEFAULT_TIMEOUT_MS = 30_000;
  * import { MailCatapulte } from "mailcatapulte";
  *
  * const client = new MailCatapulte({
- *   apiKey: "mo_live_...",
- *   baseUrl: "https://api.qonteo.fr",
+ *   apiKey: "mc_live_...",
+ *   baseUrl: "https://api.mailcatapulte.com",
  * });
  *
  * // Send an email
  * const { id } = await client.emails.send({
- *   from: "contact@qonteo.fr",
+ *   from: "contact@yourdomain.com",
  *   to: ["user@example.com"],
  *   subject: "Hello!",
  *   html: "<h1>Hello World</h1>",

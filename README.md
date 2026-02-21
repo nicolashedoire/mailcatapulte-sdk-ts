@@ -1,6 +1,6 @@
-# mailcatapulte
+# @mailcatapulte/sdk-ts
 
-Official TypeScript SDK for [MailCatapulte](https://github.com/nicolashedoire/mailcatapulte) — the self-hosted transactional email platform.
+Official TypeScript SDK for [MailCatapulte](https://mailcatapulte.com) — the self-hosted transactional email platform.
 
 - Zero dependencies (uses native `fetch`)
 - Works in Node.js 18+, Bun, Deno, Cloudflare Workers
@@ -11,16 +11,16 @@ Official TypeScript SDK for [MailCatapulte](https://github.com/nicolashedoire/ma
 ## Installation
 
 ```bash
-npm install mailcatapulte
+npm install @mailcatapulte/sdk-ts
 ```
 
 ## Quick Start
 
 ```typescript
-import { MailCatapulte } from "mailcatapulte";
+import { MailCatapulte } from "@mailcatapulte/sdk-ts";
 
 const client = new MailCatapulte({
-  apiKey: "mo_live_...",
+  apiKey: "mc_live_...",
   baseUrl: "https://api.yourdomain.com",
 });
 
@@ -39,8 +39,8 @@ console.log("Email queued:", id);
 
 ```typescript
 const client = new MailCatapulte({
-  apiKey: "mo_live_...",          // Required — from the dashboard > API Keys
-  baseUrl: "https://api.x.com",  // Default: https://api.mailcatapulte.fr
+  apiKey: "mc_live_...",          // Required — from the dashboard > API Keys
+  baseUrl: "https://api.x.com",  // Default: https://api.mailcatapulte.com
   timeoutMs: 10_000,             // Default: 30000
 });
 ```
@@ -556,7 +556,7 @@ await client.dedicatedIps.delete("ip_id");
 ## Error Handling
 
 ```typescript
-import { MailCatapulte, MailCatapulteError } from "mailcatapulte";
+import { MailCatapulte, MailCatapulteError } from "@mailcatapulte/sdk-ts";
 
 try {
   await client.emails.send({ ... });

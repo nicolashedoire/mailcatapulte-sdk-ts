@@ -825,9 +825,9 @@ export interface DedicatedIp {
 // ─── SDK Configuration ───────────────────────────────────────────────────────
 
 export interface MailCatapulteConfig {
-  /** API key (starts with `mo_live_` or `mo_test_`). */
+  /** API key (starts with `mc_live_` or `mc_test_`). */
   apiKey: string;
-  /** Base URL of the MailOps API. Defaults to `https://api.mailcatapulte.com`. */
+  /** Base URL of the MailCatapulte API. Defaults to `https://api.mailcatapulte.com`. */
   baseUrl?: string;
   /** Request timeout in milliseconds. Defaults to 30 000. */
   timeoutMs?: number;
