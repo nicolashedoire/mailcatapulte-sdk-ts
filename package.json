@@ -36,11 +36,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nicolashedoire/mailcatapulte"
+    "url": "https://github.com/nicolashedoire/mailcatapulte-sdk-ts"
   },
   "homepage": "https://mailcatapulte.com",
   "bugs": {
-    "url": "https://github.com/nicolashedoire/mailcatapulte/issues"
+    "url": "https://github.com/nicolashedoire/mailcatapulte-sdk-ts/issues"
   },
   "devDependencies": {
     "tsup": "^8.0.0",

@@ -2,17 +2,6 @@ import type { HttpClient } from "./http.js";
 import type {
   PaginatedResult,
   PaginationParams,
-  // Auth
-  RegisterParams,
-  LoginParams,
-  AuthTokenResponse,
-  ForgotPasswordParams,
-  ResetPasswordParams,
-  VerifyEmailParams,
-  TwoFactorSetupResponse,
-  TwoFactorVerifyParams,
-  TwoFactorDisableParams,
-  UserProfile,
   // Emails
   SendEmailParams,
   SendEmailResponse,
@@ -37,10 +26,6 @@ import type {
   DomainResponse,
   DomainAnalytics,
   DomainAnalyticsTimeseriesParams,
-  // API Keys
-  CreateApiKeyParams,
-  ApiKeyResponse,
-  ApiKeyCreatedResponse,
   // Webhooks
   CreateWebhookParams,
   UpdateWebhookParams,
@@ -100,121 +85,14 @@ import type {
   InboundListParams,
   CreateInboundRuleParams,
   InboundRule,
-  // Team
-  TeamListResponse,
-  InviteTeamMemberParams,
-  AcceptInvitationParams,
-  UpdateMemberRoleParams,
   // Settings
   TenantSettings,
-  UpdateSettingsParams,
   SendingRegion,
   // Dedicated IPs
   AssignDedicatedIpParams,
   UpdateDedicatedIpParams,
   DedicatedIp,
 } from "./types.js";
-
-// ─── Auth ───────────────────────────────────────────────────────────────────
-
-export class AuthResource {
-  constructor(private http: HttpClient) {}
-
-  /** Register a new user account. */
-  register(params: RegisterParams): Promise<AuthTokenResponse> {
-    return this.http.request<AuthTokenResponse>({
-      method: "POST",
-      path: "/v1/auth/register",
-      body: params,
-    });
-  }
-
-  /** Login with email and password. */
-  login(params: LoginParams): Promise<AuthTokenResponse> {
-    return this.http.request<AuthTokenResponse>({
-      method: "POST",
-      path: "/v1/auth/login",
-      body: params,
-    });
-  }
-
-  /** Request a password reset email. */
-  forgotPassword(params: ForgotPasswordParams): Promise<{ message: string }> {
-    return this.http.request<{ message: string }>({
-      method: "POST",
-      path: "/v1/auth/forgot-password",
-      body: params,
-    });
-  }
-
-  /** Reset password using a token. */
-  resetPassword(params: ResetPasswordParams): Promise<{ message: string }> {
-    return this.http.request<{ message: string }>({
-      method: "POST",
-      path: "/v1/auth/reset-password",
-      body: params,
-    });
-  }
-
-  /** Verify email address with token. */
-  verifyEmail(params: VerifyEmailParams): Promise<{ message: string }> {
-    return this.http.request<{ message: string }>({
-      method: "POST",
-      path: "/v1/auth/verify-email",
-      body: params,
-    });
-  }
-
-  /** Resend email verification. */
-  resendVerification(): Promise<{ message: string }> {
-    return this.http.request<{ message: string }>({
-      method: "POST",
-      path: "/v1/auth/resend-verification",
-    });
-  }
-
-  /** Logout the current session. */
-  logout(): Promise<{ message: string }> {
-    return this.http.request<{ message: string }>({
-      method: "POST",
-      path: "/v1/auth/logout",
-    });
-  }
-
-  /** Get the current authenticated user profile. */
-  me(): Promise<UserProfile> {
-    return this.http.request<UserProfile>({
-      method: "GET",
-      path: "/v1/auth/me",
-    });
-  }
-
-  /** Generate TOTP secret and QR code for 2FA setup. */
-  setupTwoFactor(): Promise<TwoFactorSetupResponse> {
-    return this.http.request<TwoFactorSetupResponse>({
-      method: "POST",
-      path: "/v1/auth/2fa/setup",
-    });
-  }
-
-  /** Verify TOTP code and enable 2FA. */
-  verifyTwoFactor(params: TwoFactorVerifyParams): Promise<{ message: string }> {
-    return this.http.request<{ message: string }>({
-      method: "POST",
-      path: "/v1/auth/2fa/verify",
-      body: params,
-    });
-  }
-
-  /** Disable 2FA with verification code. */
-  disableTwoFactor(params: TwoFactorDisableParams): Promise<{ message: string }> {
-    return this.http.request<{ message: string }>({
-      method: "POST",
-      path: "/v1/auth/2fa/disable",
-      body: params,
-    });
-  }
-}
 
 // ─── Emails ──────────────────────────────────────────────────────────────────
 
@@ -439,36 +317,6 @@ export class DomainsResource {
   }
 }
 
-// ─── API Keys ────────────────────────────────────────────────────────────────
-
-export class ApiKeysResource {
-  constructor(private http: HttpClient) {}
-
-  /** Create a new API key. The full key is only returned once. */
-  create(params: CreateApiKeyParams): Promise<ApiKeyCreatedResponse> {
-    return this.http.request<ApiKeyCreatedResponse>({
-      method: "POST",
-      path: "/v1/api-keys",
-      body: params,
-    });
-  }
-
-  list(): Promise<ApiKeyResponse[]> {
-    return this.http.request<ApiKeyResponse[]>({
-      method: "GET",
-      path: "/v1/api-keys",
-    });
-  }
-
-  /** Revoke an API key. Cannot be undone. */
-  revoke(id: string): Promise<{ id: string; revoked: boolean }> {
-    return this.http.request<{ id: string; revoked: boolean }>({
-      method: "DELETE",
-      path: `/v1/api-keys/${encodeURIComponent(id)}`,
-    });
-  }
-}
-
 // ─── Webhooks ────────────────────────────────────────────────────────────────
 
 export class WebhooksResource {
@@ -562,13 +410,6 @@ export class SuppressionsResource {
       method: "GET",
       path: "/v1/suppressions",
       query: params as Record<string, string | number | undefined>,
-    });
-  }
-
-  delete(id: string): Promise<{ id: string; deleted: boolean }> {
-    return this.http.request<{ id: string; deleted: boolean }>({
-      method: "DELETE",
-      path: `/v1/suppressions/${encodeURIComponent(id)}`,
     });
   }
 }
@@ -1000,64 +841,7 @@ export class InboundResource {
   }
 }
 
-// ─── Team ───────────────────────────────────────────────────────────────────
-
-export class TeamResource {
-  constructor(private http: HttpClient) {}
-
-  /** List team members and pending invitations. */
-  list(): Promise<TeamListResponse> {
-    return this.http.request<TeamListResponse>({
-      method: "GET",
-      path: "/v1/team",
-    });
-  }
-
-  /** Invite a new team member. */
-  invite(params: InviteTeamMemberParams): Promise<{ message: string }> {
-    return this.http.request<{ message: string }>({
-      method: "POST",
-      path: "/v1/team/invite",
-      body: params,
-    });
-  }
-
-  /** Accept a team invitation. */
-  acceptInvitation(params: AcceptInvitationParams): Promise<AuthTokenResponse> {
-    return this.http.request<AuthTokenResponse>({
-      method: "POST",
-      path: "/v1/team/accept",
-      body: params,
-    });
-  }
-
-  /** Update a team member's role. */
-  updateRole(memberId: string, params: UpdateMemberRoleParams): Promise<{ message: string }> {
-    return this.http.request<{ message: string }>({
-      method: "PUT",
-      path: `/v1/team/${encodeURIComponent(memberId)}/role`,
-      body: params,
-    });
-  }
-
-  /** Remove a team member. */
-  remove(memberId: string): Promise<{ id: string; removed: boolean }> {
-    return this.http.request<{ id: string; removed: boolean }>({
-      method: "DELETE",
-      path: `/v1/team/${encodeURIComponent(memberId)}`,
-    });
-  }
-
-  /** Cancel a pending invitation. */
-  cancelInvitation(invitationId: string): Promise<{ id: string; cancelled: boolean }> {
-    return this.http.request<{ id: string; cancelled: boolean }>({
-      method: "DELETE",
-      path: `/v1/team/invitations/${encodeURIComponent(invitationId)}`,
-    });
-  }
-}
-
-// ─── Settings ───────────────────────────────────────────────────────────────
+// ─── Settings (read-only) ───────────────────────────────────────────────────
 
 export class SettingsResource {
   constructor(private http: HttpClient) {}
@@ -1067,15 +851,6 @@ export class SettingsResource {
     return this.http.request<TenantSettings>({
       method: "GET",
       path: "/v1/settings",
-    });
-  }
-
-  /** Update tenant settings. */
-  update(params: UpdateSettingsParams): Promise<TenantSettings> {
-    return this.http.request<TenantSettings>({
-      method: "PATCH",
-      path: "/v1/settings",
-      body: params,
     });
   }
 

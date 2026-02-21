@@ -6,7 +6,7 @@ Official TypeScript SDK for [MailCatapulte](https://mailcatapulte.com) — the s
 - Works in Node.js 18+, Bun, Deno, Cloudflare Workers
 - Full TypeScript types
 - ESM and CommonJS support
-- **19 resources** covering 100% of the API
+- **16 resources** covering the public API
 
 ## Installation
 
@@ -46,36 +46,6 @@ const client = new MailCatapulte({
 ```
 
 ## API Reference
-
-### Auth
-
-```typescript
-// Register
-const { token, user } = await client.auth.register({
-  email: "admin@example.com",
-  password: "securePassword",
-  name: "Admin",
-});
-
-// Login
-const { token } = await client.auth.login({
-  email: "admin@example.com",
-  password: "securePassword",
-  totp_code: "123456", // if 2FA is enabled
-});
-
-// Get current user
-const profile = await client.auth.me();
-
-// 2FA setup
-const { secret, qrCode } = await client.auth.setupTwoFactor();
-await client.auth.verifyTwoFactor({ code: "123456" });
-await client.auth.disableTwoFactor({ code: "123456" });
-
-// Password reset
-await client.auth.forgotPassword({ email: "user@example.com" });
-await client.auth.resetPassword({ token: "...", password: "newPass" });
-```
 
 ### Emails
 
@@ -197,6 +167,9 @@ const domain = await client.domains.create({ domain: "yourdomain.com" });
 // List domains
 const domains = await client.domains.list();
 
+// Get domain details
+const detail = await client.domains.get("domain_id");
+
 // Verify DNS records
 const verified = await client.domains.verify("domain_id");
 
@@ -213,23 +186,6 @@ const ts = await client.domains.analyticsTimeseries("domain_id", {
 
 // Delete
 await client.domains.delete("domain_id");
-```
-
-### API Keys
-
-```typescript
-// Create (the full key is only returned once!)
-const { key, id } = await client.apiKeys.create({
-  name: "Production Key",
-  permissions: ["send", "templates"],
-  expires_at: "2027-01-01T00:00:00Z",
-});
-
-// List
-const keys = await client.apiKeys.list();
-
-// Revoke
-await client.apiKeys.revoke("key_id");
 ```
 
 ### Webhooks
@@ -276,6 +232,9 @@ const audience = await client.audiences.create({
 
 // List audiences
 const audiences = await client.audiences.list();
+
+// Get audience details
+const detail = await client.audiences.get("audience_id");
 
 // Add contact
 const contact = await client.audiences.addContact("audience_id", {
@@ -405,9 +364,6 @@ await client.suppressions.create({
 
 // List
 const { data } = await client.suppressions.list({ reason: "complaint" });
-
-// Remove
-await client.suppressions.delete("suppression_id");
 ```
 
 ### Consents (GDPR)
@@ -460,10 +416,22 @@ const warmup = await client.reputation.startWarmup({
 // List warmup schedules
 const warmups = await client.reputation.listWarmups();
 
+// Get warmup details
+const detail = await client.reputation.getWarmup("warmup_id");
+
+// Cancel warmup
+await client.reputation.cancelWarmup("warmup_id");
+
 // Check blacklist
 const check = await client.reputation.checkBlacklist({
   ip_address: "1.2.3.4",
 });
+
+// Blacklist check history
+const history = await client.reputation.blacklistHistory();
+
+// Submit ARF complaint report
+await client.reputation.submitComplaint({ /* ARF payload */ });
 
 // Reputation stats
 const stats = await client.reputation.stats();
@@ -493,39 +461,11 @@ const rules = await client.inbound.listRules();
 await client.inbound.deleteRule("rule_id");
 ```
 
-### Team
-
-```typescript
-// List members and invitations
-const { members, invitations } = await client.team.list();
-
-// Invite member
-await client.team.invite({
-  email: "colleague@example.com",
-  role: "member",
-});
-
-// Update role
-await client.team.updateRole("member_id", { role: "admin" });
-
-// Remove member
-await client.team.remove("member_id");
-
-// Cancel invitation
-await client.team.cancelInvitation("invitation_id");
-```
-
-### Settings
+### Settings (read-only)
 
 ```typescript
 // Get tenant settings
 const settings = await client.settings.get();
-
-// Update
-await client.settings.update({
-  name: "My Company",
-  sending_region: "eu-west-1",
-});
 
 // List available regions
 const regions = await client.settings.regions();
@@ -542,6 +482,12 @@ const ip = await client.dedicatedIps.create({
 
 // List
 const ips = await client.dedicatedIps.list();
+
+// Get details
+const detail = await client.dedicatedIps.get("ip_id");
+
+// Update
+await client.dedicatedIps.update("ip_id", { label: "Staging" });
 
 // Start warmup
 await client.dedicatedIps.startWarmup("ip_id");
@@ -568,6 +514,16 @@ try {
   }
 }
 ```
+
+## Security
+
+This SDK is designed for API key authentication only. The following resources are intentionally excluded and should only be managed via the dashboard:
+
+- **Authentication** (register, login, 2FA) — session-based, not API key compatible
+- **API Keys** — prevents privilege escalation from a compromised key
+- **Team management** — prevents unauthorized access changes
+- **Settings mutation** — prevents account-level destructive changes
+- **Suppression removal** — prevents re-sending to bounced/complained addresses
 
 ## License
 

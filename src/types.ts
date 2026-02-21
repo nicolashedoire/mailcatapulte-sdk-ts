@@ -17,69 +17,6 @@ export interface PaginationParams {
   limit?: number;
 }
 
-// ─── Auth Types ─────────────────────────────────────────────────────────────
-
-export interface RegisterParams {
-  email: string;
-  password: string;
-  name: string;
-  tenant_name?: string;
-}
-
-export interface LoginParams {
-  email: string;
-  password: string;
-  totp_code?: string;
-}
-
-export interface AuthTokenResponse {
-  token: string;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-    role: string;
-    tenantId: string;
-  };
-}
-
-export interface ForgotPasswordParams {
-  email: string;
-}
-
-export interface ResetPasswordParams {
-  token: string;
-  password: string;
-}
-
-export interface VerifyEmailParams {
-  token: string;
-}
-
-export interface TwoFactorSetupResponse {
-  secret: string;
-  qrCode: string;
-}
-
-export interface TwoFactorVerifyParams {
-  code: string;
-}
-
-export interface TwoFactorDisableParams {
-  code: string;
-}
-
-export interface UserProfile {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-  tenantId: string;
-  twoFactorEnabled: boolean;
-  emailVerified: boolean;
-  createdAt: string;
-}
-
 // ─── Email Types ─────────────────────────────────────────────────────────────
 
 export interface Attachment {
@@ -300,36 +237,6 @@ export interface DomainAnalyticsTimeseriesParams {
   from_date?: string;
   to_date?: string;
   interval?: "hour" | "day" | "week";
-}
-
-// ─── API Key Types ───────────────────────────────────────────────────────────
-
-export type ApiKeyPermission =
-  | "send"
-  | "domains"
-  | "templates"
-  | "analytics"
-  | "admin";
-
-export interface CreateApiKeyParams {
-  name: string;
-  permissions?: ApiKeyPermission[];
-  expires_at?: string;
-}
-
-export interface ApiKeyResponse {
-  id: string;
-  name: string;
-  keyPrefix: string;
-  permissions: string[];
-  lastUsedAt: string | null;
-  expiresAt: string | null;
-  createdAt: string;
-}
-
-export interface ApiKeyCreatedResponse extends ApiKeyResponse {
-  /** Full API key — only returned once at creation time. Store it securely. */
-  key: string;
 }
 
 // ─── Webhook Types ───────────────────────────────────────────────────────────
@@ -744,44 +651,6 @@ export interface InboundRule {
   createdAt: string;
 }
 
-// ─── Team Types ─────────────────────────────────────────────────────────────
-
-export interface TeamMember {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-  joinedAt: string;
-}
-
-export interface TeamInvitation {
-  id: string;
-  email: string;
-  role: string;
-  invitedAt: string;
-  expiresAt: string;
-}
-
-export interface TeamListResponse {
-  members: TeamMember[];
-  invitations: TeamInvitation[];
-}
-
-export interface InviteTeamMemberParams {
-  email: string;
-  role?: "admin" | "member" | "viewer";
-}
-
-export interface AcceptInvitationParams {
-  token: string;
-  name: string;
-  password: string;
-}
-
-export interface UpdateMemberRoleParams {
-  role: "admin" | "member" | "viewer";
-}
-
 // ─── Settings Types ─────────────────────────────────────────────────────────
 
 export interface TenantSettings {
@@ -789,11 +658,6 @@ export interface TenantSettings {
   name: string;
   sendingRegion: string | null;
   [key: string]: unknown;
-}
-
-export interface UpdateSettingsParams {
-  name?: string;
-  sending_region?: string;
 }
 
 export interface SendingRegion {
